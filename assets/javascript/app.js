@@ -42,6 +42,8 @@ var questionAnswer = [
 var globalI = 0;
 var correctAnswer = '';
 var playerAnswer = '';
+var timeLeft = 10;
+var timer;
 
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -52,24 +54,24 @@ function shuffleArray(array) {
     }
 }
 
-function timer(){
-    var time = 10
-    for(var i = 0; i<=time; i++){
-        if(i === time){
-            (function(i){
-                setTimeout(function(){
-                    $('#timer').text("Time's Up!")
-                }, i*1000)
-            })(i)
-        }else{
-            (function(i){
-                setTimeout(function(){
-                    $('#timer').text(time - i)
-                }, i*1000)
-            })(i) //IIFE works, setTimeout without this doesn't
-        }
-    }
-}
+// function timer(){
+//     var time = 10
+//     for(var i = 0; i<=time; i++){
+//         if(i === time){
+//             (function(i){
+//                 setTimeout(function(){
+//                     $('#timer').text("Time's Up!")
+//                 }, i*1000)
+//             })(i)
+//         }else{
+//             (function(i){
+//                 setTimeout(function(){
+//                     $('#timer').text(time - i)
+//                 }, i*1000)
+//             })(i) //IIFE works, setTimeout without this doesn't
+//         }
+//     }
+// }
 
 function showQandA(){
     var ques = questionAnswer[globalI].question;
@@ -81,8 +83,21 @@ function showQandA(){
         $('#answers').append('<div class="answer">' + v + '</div>')
     })
     globalI ++;
-    timer();
+    $('#timer').text(timeLeft);
+    timer = setInterval(updateTime, 1000);
+    
 
+}
+
+function updateTime(){
+    if(timeLeft > 1){
+        timeLeft --;
+        $('#timer').text(timeLeft);
+    }else{
+        clearInterval(timer);
+        $('#timer').text("Time's up!");
+        timeLeft = 10;
+    }
 }
 
 function startGame(){
