@@ -44,6 +44,7 @@ var correctAnswer = '';
 var playerAnswer = '';
 var timeLeft = 10;
 var timer;
+var questionInt = 5;
 
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -74,14 +75,23 @@ function shuffleArray(array) {
 // }
 
 function showQandA(){
+    $('#answers').html('');
+    timeLeft = 10;
     var ques = questionAnswer[globalI].question;
     var answers = questionAnswer[globalI].answers;
     $('#ques').text(ques);
     var randomI = Math.floor(Math.random()*answers.length);
     correctAnswer = answers[randomI];
     answers.forEach(function(v, i){
-        $('#answers').append('<div class="answer">' + v + '</div>')
+        var id = '';
+        if (correctAnswer === v){
+            id = 'id="correct"'
+        }
+        $('#answers').append('<div class="answer"' + id + '>' + v + '</div>')
     })
+
+    $('.answer').on('click', checkAns); //Can't put this in global scope
+
     globalI ++;
     $('#timer').text(timeLeft);
     timer = setInterval(updateTime, 1000);
@@ -94,9 +104,9 @@ function updateTime(){
         timeLeft --;
         $('#timer').text(timeLeft);
     }else{
+        timeLeft --
         clearInterval(timer);
         $('#timer').text("Time's up!");
-        timeLeft = 10;
     }
 }
 
@@ -109,6 +119,26 @@ function startGame(){
     $('#playMe').addClass('invisible');
 }
 
-$('#playMe').click(startGame)
+function checkAns(){
+    clearInterval(timer);
+    $('.answer').off()
+
+    if (timeLeft > 0){
+        playerAnswer = $(this).text();
+        if(playerAnswer === correctAnswer){
+            console.log('Yay!')
+        }else{
+            console.log('Nope')
+        }
+    }else{
+        console.error('Something went wrong...');
+    }
+
+    setTimeout(showQandA, questionInt);
+}
+
+$('#playMe').click(startGame);
+
+
 
         
