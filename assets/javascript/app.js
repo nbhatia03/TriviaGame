@@ -25,7 +25,8 @@ var questionAnswer = [
         question: 'What is your worst fear?',
         answers: ["Spiders", "Heights", "Commitment", "The inevitability of death", "Public Speaking"]
     },{
-        question: 'What is your favorite movie?'
+        question: 'What is your favorite movie?',
+        answers: ['Remember the Titans', 'Star Wars']
     },{
         question: 'What is your favorite sport?',
         answers: ["Football", "Basketball", "Baseball", "Soccer"]
@@ -44,7 +45,9 @@ var correctAnswer = '';
 var playerAnswer = '';
 var timeLeft = 10;
 var timer;
-var questionInt = 5;
+var questionInt = 5000;
+var correctNum = 0;
+var incorrectNum = 0;
 
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -74,27 +77,43 @@ function shuffleArray(array) {
 //     }
 // }
 
+
+//show Question and Answers in DOM
 function showQandA(){
-    $('#answers').html('');
-    timeLeft = 10;
-    var ques = questionAnswer[globalI].question;
-    var answers = questionAnswer[globalI].answers;
-    $('#ques').text(ques);
-    var randomI = Math.floor(Math.random()*answers.length);
-    correctAnswer = answers[randomI];
-    answers.forEach(function(v, i){
-        var id = '';
-        if (correctAnswer === v){
-            id = 'id="correct"'
-        }
-        $('#answers').append('<div class="answer"' + id + '>' + v + '</div>')
-    })
+    //out of questions
+    if(globalI === questionAnswer.length){
+        $('#game').fadeOut();
+        
+        setTimeout(function(){
+            $('#results')
+            .append('<div> Correct: ' + correctNum + '</div>')
+            .append('<div> Incorrect: ' + incorrectNum + '</div>')
+            .fadeIn()
+            .removeClass('invisible');
+        }, 1000)
 
-    $('.answer').on('click', checkAns); //Can't put this in global scope
+    }else{
+        $('#answers').html('');
+        timeLeft = 10;
+        var ques = questionAnswer[globalI].question;
+        var answers = questionAnswer[globalI].answers;
+        $('#ques').text(ques);
+        var randomI = Math.floor(Math.random()*answers.length); //choosing random answer to be correct
+        correctAnswer = answers[randomI];
+        answers.forEach(function(v, i){
+            var id = '';
+            if (correctAnswer === v){
+                id = 'id="correct"'
+            }
+            $('#answers').append('<div class="answer"' + id + '>' + v + '</div>')
+        })
 
-    globalI ++;
-    $('#timer').text(timeLeft);
-    timer = setInterval(updateTime, 1000);
+        $('.answer').on('click', checkAns); //Can't put this in global scope
+
+        globalI ++;
+        $('#timer').text(timeLeft);
+        timer = setInterval(updateTime, 1000);
+    }
     
 
 }
@@ -107,6 +126,9 @@ function updateTime(){
         timeLeft --
         clearInterval(timer);
         $('#timer').text("Time's up!");
+        $('#correct').addClass('green');
+        incorrectNum++
+        setTimeout(showQandA, questionInt);
     }
 }
 
@@ -126,12 +148,15 @@ function checkAns(){
     if (timeLeft > 0){
         playerAnswer = $(this).text();
         if(playerAnswer === correctAnswer){
-            console.log('Yay!')
+            console.log('Yay!');
+            $('#correct').addClass('green');
+            correctNum++;
         }else{
-            console.log('Nope')
+            console.log('Nope');
+            $(this).addClass('red');
+            $('#correct').addClass('green');
+            incorrectNum ++;
         }
-    }else{
-        console.error('Something went wrong...');
     }
 
     setTimeout(showQandA, questionInt);
