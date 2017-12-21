@@ -19,7 +19,7 @@ var questionAnswer = [
         question: 'What is your favorite food?',
         answers: ["Pizza", "Burgers", "Noodles", "Other"]
     },{
-        question: 'What are your favorite animals?',
+        question: 'What is your favorite animal?',
         answers: ["Dogs", "Cats", "Mokeys", "Koalas", "Penguins"]
     },{
         question: 'What is your worst fear?',
@@ -80,6 +80,8 @@ function shuffleArray(array) {
 
 //show Question and Answers in DOM
 function showQandA(){
+
+    $('#message').fadeOut().empty();
     
     //if there are no more questions
     if(globalI === questionAnswer.length){
@@ -174,10 +176,30 @@ function checkAns(){
             $(this).addClass('red');
             $('#correct').addClass('green');
             incorrectNum ++;
+        
+            
         }
+        message();
     }
 
     setTimeout(showQandA, questionInt);
+}
+
+function message(){
+    var beginnings = ['Actually,', 'No,', 'Incorrect,', 'Wrong,', 'Nope,', "You don't know yourself at all - "]
+    var ques = questionAnswer[globalI - 1].question;
+    //Piece together message based on user input and question
+    if(playerAnswer !== correctAnswer){
+        var quesBit = ques.slice(7, ques.length-1);
+        var randomInd = [Math.floor(Math.random()*beginnings.length)]
+        var correctAns = $('#correct').text()
+        var response = beginnings[randomInd] + quesBit + ' is ' + correctAns + '!';
+        $('#message').text(response);
+    }else{
+        $('#message').text('Correct!');    
+    }
+
+    $('#message').fadeIn();
 }
 
 $('#playMe').click(startGame);

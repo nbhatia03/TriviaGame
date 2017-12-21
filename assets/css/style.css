@@ -10,6 +10,8 @@
 
 body{
     display: flex;
+    font-family: 'Asap', sans-serif;
+    
 }
 #main{
     margin-left:auto;
@@ -34,10 +36,17 @@ body{
     font-family: Headline-bulbs, sans-serif;
 }
 
-#game, #description, #timer{
+#game, #description, #timer, #message{
     margin: auto;
 }
 
 #game{
     display: flex;
+    font-size: 1.25rem;
 }
+
+#ques{
+    font-weight: bold;
+}
+
+
