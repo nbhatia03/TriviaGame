@@ -80,7 +80,8 @@ function shuffleArray(array) {
 
 //show Question and Answers in DOM
 function showQandA(){
-    //out of questions
+    
+    //if there are no more questions
     if(globalI === questionAnswer.length){
         $('#game').fadeOut();
         
@@ -91,6 +92,10 @@ function showQandA(){
             .fadeIn()
             .removeClass('invisible');
         }, 1000)
+
+        setTimeout(function(){
+            $('#playMe').removeClass('invisible').text('Play Again');
+        }, 2000)
 
     }else{
         $('#answers').html('');
@@ -119,10 +124,18 @@ function showQandA(){
 }
 
 function updateTime(){
+    // if (timeLeft === 3){
+    //     $('#timer').addClass('red').animate({fontSize: '30px'}, 3000)
+    // } have to reset size and color of timer if I use this
+
     if(timeLeft > 1){
         timeLeft --;
-        $('#timer').text(timeLeft);
+        $('#timer').fadeOut(200)
+        setTimeout(function(){
+            $('#timer').fadeIn(200).text(timeLeft);
+        },200)
     }else{
+        //Time's up
         timeLeft --
         clearInterval(timer);
         $('#timer').text("Time's up!");
@@ -134,11 +147,16 @@ function updateTime(){
 
 function startGame(){
     globalI = 0;
-    orrectAnswer = '';
+    correctAnswer = '';
     playerAnswer = '';
+    correctNum = 0;
+    incorrectNum = 0;
     $('#description').addClass('invisible');
+    $('#game').fadeIn();
+    $('#results').empty().addClass('invisible');
     showQandA();
     $('#playMe').addClass('invisible');
+
 }
 
 function checkAns(){
@@ -164,6 +182,7 @@ function checkAns(){
 
 $('#playMe').click(startGame);
 
+$('#title').animate({fontSize: "3rem"}, 700).animate({fontSize: "2.5rem"})
 
 
         

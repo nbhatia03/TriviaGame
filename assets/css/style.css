@@ -1,7 +1,43 @@
+@font-face{
+    font-family: Headline;
+    src: url(../fonts/Headline.ttf)
+}
+
+@font-face{
+    font-family: Headline-bulbs;
+    src: url(../fonts/Headline_bulbs.ttf)
+}
+
+body{
+    display: flex;
+}
+#main{
+    margin-left:auto;
+    margin-right:auto;
+}
+
 .red{
     color: red;
 }
 
 .green{
-    color: green;
+    color: limegreen;
+    transition: color 2s;
+}
+
+#title{
+    font-family: Headline, sans-serif;
+    margin: 0 auto;
+}
+
+#titleBulbs{
+    font-family: Headline-bulbs, sans-serif;
+}
+
+#game, #description, #timer{
+    margin: auto;
+}
+
+#game{
+    display: flex;
 }
